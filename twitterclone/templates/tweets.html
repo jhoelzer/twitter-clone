@@ -1,0 +1,10 @@
+{% if request.get_full_path == '/tweets/' or '/tweet/' in request.get_full_path %}
+{% include 'navbar.html' %}
+{% endif %}
+
+<h2>Tweets</h2>
+{% for tweet in tweets %}
+<p><a href='/{{ tweet.user.username }}/'>@{{ tweet.user.username }}</a> on <a href='/tweet/{{ tweet.id }}'>{{ tweet.date }}</a></p>
+<p>{{ tweet.tweet }}</p>
+<p style='font-size: 6px'>Tweet #{{ tweet.id }}</p>
+{% endfor %}

@@ -1,0 +1,16 @@
+{% extends 'navbar.html' %} {% block main %}
+<h1>Profile: {{ target_user.username }}</h1>
+<p>@{{ target_user.username }}</p>
+<p>Display Name: {{ target_user.display }}</p>
+<p>Number of Tweets: {{ num_tweet }}</p>
+
+<p>Number of Users @{{ target_user.username }} is Following: {{ num_followers }}</p>
+{% if target_user.username != request.user.username %}
+<a href='/followstat/{{ target_user.username }}'>
+    <button>{{ follow_stat_button }}</button>
+</a>
+{% else %}
+<p>Number of Notifications: {{ notifications }}</p>
+{% endif %} 
+{% include 'tweets.html' %}
+{% endblock %}

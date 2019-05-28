@@ -1,0 +1,9 @@
+{% extends 'navbar.html' %} {% block main %}
+
+<h1>{{ header }}</h1>
+{% if is_following %}
+<p>Following user</p>
+{% else %}
+<p>Unfollowed user</p>
+{% endif %}
+{% endblock %}
