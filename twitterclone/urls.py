@@ -19,12 +19,12 @@ from twitterclone.authentication.urls import urlpatterns as authentication_urls
 from twitterclone.notification.urls import urlpatterns as notification_urls
 from twitterclone.tweet.urls import urlpatterns as tweet_urls
 from twitterclone.twitteruser.urls import urlpatterns as twitteruser_urls
-from twitterclone.views import home_view
+from twitterclone.views import HomeView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_view, name='home')
+    path('', HomeView.as_view(), name='home')
 ]
 
 

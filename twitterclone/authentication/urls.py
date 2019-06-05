@@ -1,7 +1,7 @@
-from twitterclone.authentication.views import (login_user, logout_user)
+from twitterclone.authentication.views import (LoginView, LogoutView)
 from django.urls import path
 
 urlpatterns = [
-    path('login/', login_user),
-    path('logout/', logout_user)
+    path('login/', LoginView.as_view()),
+    path('logout/', LogoutView.as_view())
 ]

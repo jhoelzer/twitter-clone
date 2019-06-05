@@ -1,16 +1,25 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, HttpResponseRedirect
+from django.views import View
 from twitterclone.authentication.forms import LoginForm
 
 
-def login_user(request):
-    form = None
-    html = '../templates/main.html'
+class LoginView(View):
+    form_class = LoginForm
+    template_name = '../templates/main.html'
     header = 'Login'
     button_val = 'Login'
+    url_redirect = '/'
 
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name,
+                      {"header": self.header, "form": form,
+                       "button_val": self.button_val}
+                      )
+
+    def post(self, request):
+        form = self.form_class(request.POST)
 
         if form.is_valid():
             data = form.cleaned_data
@@ -21,14 +30,14 @@ def login_user(request):
                 login(request, user)
                 return HttpResponseRedirect(request.GET.get('next', '/'))
 
-    else:
-        form = LoginForm()
+        return render(request, self.template_name,
+                      {"header": self.header, "form": form,
+                       "button_val": self.button_val}
+                      )
 
-    return render(request, html, {'header': header, 'form': form,
-                                  'button_val': button_val})
 
-
-def logout_user(request):
-    html = 'logout.html'
-    logout(request)
-    return render(request, html)
+class LogoutView(View):
+    def get(self, request):
+        html = 'logout.html'
+        logout(request)
+        return render(request, html)

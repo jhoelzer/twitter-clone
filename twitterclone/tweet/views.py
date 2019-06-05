@@ -1,21 +1,29 @@
 import re
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, reverse, HttpResponseRedirect
+from django.views import View
 from twitterclone.notification.models import Notification
 from twitterclone.tweet.forms import TweetForm
 from twitterclone.tweet.models import Tweet
 from twitterclone.twitteruser.models import TwitterUser
 
 
-@login_required()
-def create_tweet(request):
-    form = None
-    html = '../templates/main.html'
+class CreateTweetView(View):
+    model = Tweet
+    form_class = TweetForm
+    template_name = '../templates/main.html'
     header = "What's up?"
     button_val = 'Post'
+    url_redirect = 'home'
 
-    if request.method == 'POST':
-        form = TweetForm(request.POST)
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name,
+                      {'header': self.header, 'form': form,
+                       'button_val': self.button_val})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
 
         if form.is_valid():
             data = form.cleaned_data
@@ -32,16 +40,15 @@ def create_tweet(request):
                     tweet=tweet
                 )
 
-        return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse(self.url_redirect))
 
-    else:
-        form = TweetForm()
-
-    return render(request, html, {'header': header, 'form': form,
-                                  'button_val': button_val})
+        return render(request, self.template_name,
+                      {'header': self.header, 'form': form,
+                       'button_val': self.button_val})
 
 
-def tweet_view(request, id):
-    html = 'tweets.html'
-    tweets = Tweet.objects.filter(id=id)
-    return render(request, html, {'tweets': tweets})
+class TweetView(View):
+    def get(self, request, id):
+        html = 'tweets.html'
+        tweets = Tweet.objects.filter(id=id)
+        return render(request, html, {'tweets': tweets})
