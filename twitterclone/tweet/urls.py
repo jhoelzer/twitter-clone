@@ -6,5 +6,5 @@ from twitterclone.tweet.views import (CreateTweetView, TweetView)
 urlpatterns = [
     path('tweet/', login_required(CreateTweetView.as_view()),
          name='createtweet'),
-    path('tweet/<int:id>/', TweetView, name='specific')
+    path('tweet/<int:id>/', TweetView.as_view(), name='specific')
 ]
